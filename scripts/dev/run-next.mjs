@@ -14,6 +14,7 @@ import headResponseGuard from "./head-response-guard.cjs";
 import { ensureNativeSqlite } from "./ensure-native-sqlite.mjs";
 import { isTurbopackCacheCorruption, purgeAllTurbopackCaches } from "./turbopackCacheHeal.mjs";
 import { randomUUID } from "node:crypto";
+import { exec } from "node:child_process";
 import { getMainServerTimeoutConfig } from "./main-server-timeouts.mjs";
 
 const { maybeHandleDisallowedMethod } = methodGuard;
@@ -199,9 +200,24 @@ async function start() {
 
   server.listen(dashboardPort, hostname, () => {
     const bundler = dev ? (useTurbopack ? "turbopack" : "webpack") : "production";
-    console.log(
-      `[Next] ${mode} server listening on http://${hostname}:${dashboardPort} (${bundler})`
-    );
+    const url = `http://localhost:${dashboardPort}`;
+
+    console.log(`[Next] ${mode} server listening on ${url} (${bundler})`);
+
+    if (dev && process.env.OMNIROUTE_NO_BROWSER !== "1") {
+      const command =
+        process.platform === "win32"
+          ? `start "" "${url}"`
+          : process.platform === "darwin"
+            ? `open "${url}"`
+            : `xdg-open "${url}"`;
+
+      exec(command, (error) => {
+        if (error) {
+          console.warn(`[Next] Could not open browser automatically: ${error.message}`);
+        }
+      });
+    }
   });
 }
 
