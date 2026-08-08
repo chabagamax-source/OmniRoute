@@ -260,6 +260,7 @@ tests/homolog/.auth/
 tests/homolog/ui/.auth/
 homolog-report/
 docker-compose.yml.bak
+<<<<<<< HEAD
 .playwright-cli/
 # Playwright screenshot/log output. Today every artifact happens to land inside
 # output/**/.playwright-cli/ (covered above), but anything written directly to
@@ -268,4 +269,10 @@ docker-compose.yml.bak
 
 # _tasks e um repo git SEPARADO (ver AGENTS.md). _tasks/ (com barra) NAO ignora um
 # SYMLINK _tasks; /_tasks (ancorado) cobre symlink/dir na raiz (incidente 2026-08-08).
+=======
+
+# _tasks e um repo git SEPARADO (ver AGENTS.md). A linha _tasks/ (com barra) NAO
+# ignora um SYMLINK chamado _tasks; /_tasks (ancorado) cobre arquivo/symlink/dir na raiz
+# e impede que um git add -A recapture o symlink (incidente 2026-08-08).
+>>>>>>> upstream/main
 /_tasks
